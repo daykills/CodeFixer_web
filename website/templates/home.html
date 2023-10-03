@@ -6,27 +6,9 @@
 
   <pre>
     <code class="line-numbers language-{{lang}}">
-      {{code}}
+    {{code}}
     </code>
   </pre>
-
-  <br><br>
-  <form method=POST action="{% url 'home' %}">
-    {% csrf_token %}
-    <div class="mb-3">
-      <textarea class="form-control" name="code" 
-      placeholder="Enter your code here, A.I. will fix it" rows="3"></textarea>
-    </div>
-    <select class="form-select" name="lang">
-      <option selected>Select Programming Language</option>
-      {% for lang in lang_list %}
-      <option value="1">{{lang}}</option>
-      {% endfor %}
-    </select>
-  <br><br> 
-  <button type="submit" class="btn btn-secondary">Submit</button>
-  </form>
-
 
   {% else %}
 
@@ -38,7 +20,7 @@
         study with coding
     </code>
   </pre>
-
+  {% endif %}
     <br><br>
     <form method=POST action="{% url 'home' %}">
       {% csrf_token %}
@@ -47,7 +29,7 @@
         placeholder="Enter your code here, A.I. will fix it" rows="3"></textarea>
       </div>
       <select class="form-select" name="lang">
-        <option selected>Select Programming Language</option>
+        <option selected>Select Programming Languages</option>
         {% for lang in lang_list %}
         <option value="lang">{{lang}}</option>
         {% endfor %}
@@ -59,7 +41,7 @@
   
 
 
-{% endif %}
+
 {% endblock %}
 
 
