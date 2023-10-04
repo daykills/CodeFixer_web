@@ -4,6 +4,7 @@ import openai
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm
+from .models import Code
 
 def home(request):
     lang_list = ['c', 'clike', 'cpp', 'csharp', 'css', 'dart', 'django', 'go',
@@ -34,6 +35,10 @@ def home(request):
                     presence_penalty=0.0,
                     )
                 response = response['choices'][0]['text'].strip()
+                # save to db
+                record = Code(question=code, code_answer=response,
+                              language=lang, user=request.user)
+                record.save()
                 return render(request, 'home.html', {'lang': lang,
                                                      'response': response,
                                                      'lang_list': lang_list})
@@ -84,3 +89,19 @@ def signup_user(request):
         form = SignUpForm()
 
     return render(request, 'signup_user.html', {"form": form})
+
+
+def history(request):
+    if request.user.is_authenticated:
+        records = Code.objects.filter(user_id=request.user.id)
+        return render(request, 'history.html', {'records': records})
+    else:
+        messages.success(request, "You Must Be Logged In To View This Page")
+        return redirect('home')
+
+
+def delete_history(request, record_id):
+    history_id = Code.objects.get(pk=record_id)
+    history_id.delete()
+    messages.success(request, "Deleted successfully")
+    return redirect('home')
