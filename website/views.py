@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib import messages
 import openai
-
+from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.forms import UserCreationForm
+from .forms import SignUpForm 
 
 def home(request):
     lang_list = ['c', 'clike', 'cpp', 'csharp', 'css', 'dart', 'django', 'go',
@@ -17,7 +19,7 @@ def home(request):
             messages.success(request,
                              "You forgot to select a programming language")
             return render(request, 'home.html', {'lang': lang, 'code': code,
-                                'lang_list': lang_list})
+                            'lang_list': lang_list})
         else:
             openai.api_key = "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"
             openai.Model.list()
@@ -44,3 +46,40 @@ def home(request):
 
     return render(request, 'home.html', {'lang_list': lang_list})
 
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            messages.success(request, "You have been logged in.")
+            return redirect('home')
+        else:
+            messages.success(request, "Error logging in. Try again.")
+            return redirect('home')
+    return render(request, 'home.html', {})
+    
+def logout_user(request):
+    logout(request)
+    messages.success(request, "You have been logged out.")
+    return redirect('home')
+
+def signup_user(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            messages.success(request, "You have been registered.")
+            return redirect('home')
+    else:
+        form = SignUpForm()
+
+    return render(request, 'signup_user.html', {"form": form})
