@@ -1,9 +1,9 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
 import openai
-from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignUpForm 
+from .forms import SignUpForm
 
 def home(request):
     lang_list = ['c', 'clike', 'cpp', 'csharp', 'css', 'dart', 'django', 'go',
@@ -69,6 +69,7 @@ def logout_user(request):
 def signup_user(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
+        print(form.is_valid())
 
         if form.is_valid():
             form.save()

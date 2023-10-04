@@ -9,9 +9,18 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'home' %}">Suggest</a>
         </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout_user' %}">Logout</a>
+        </li>
+        {% else %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'signup_user' %}">Register</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'home' %}">Login</a>
+        </li>
+        {% endif %}
     </div>
   </div>
 </nav>
