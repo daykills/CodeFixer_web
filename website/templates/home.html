@@ -1,12 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>hello!!!</h1>
-
-  {% if code %}
+  {% if response %}
 
   <pre>
     <code class="line-numbers language-{{lang}}">
-    {{code}}
+    {{ response }}
     </code>
   </pre>
 
@@ -26,7 +24,7 @@
       {% csrf_token %}
       <div class="mb-3">
         <textarea class="form-control" name="code" 
-        placeholder="Enter your code here, A.I. will fix it" rows="3"></textarea>
+        placeholder="Enter your code here/questions, A.I. will fix/suggest it" rows="5"></textarea>
       </div>
       <select class="form-select" name="lang">
         <option selected>Select Programming Languages</option>
