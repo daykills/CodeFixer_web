@@ -22,7 +22,7 @@ def home(request):
             return render(request, 'home.html', {'lang': lang, 'code': code,
                             'lang_list': lang_list})
         else:
-            openai.api_key = "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"
+            openai.api_key = ""
             openai.Model.list()
             try:
                 response = openai.Completion.create(
